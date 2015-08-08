@@ -2,7 +2,7 @@
 
 Suppose that we observed several time series and their underlying processes are discreted-valued. The sticky hidden-Markov model can be used to denoised these noisy time series. Run `python3 shdp_demo.py` to show a demonstration (with animation!).
 
-![Graphical](https://cloud.githubusercontent.com/assets/6327275/9149599/6b22c25c-3d66-11e5-978b-6488623d51fa.png)
+![Graphical](https://cloud.githubusercontent.com/assets/6327275/9151203/4c2fae34-3daf-11e5-8919-c5f04de80f04.png)
 
 ![Screenshot](https://cloud.githubusercontent.com/assets/6327275/9149253/49ab89ac-3d56-11e5-9e28-b825f1854800.png)
 
