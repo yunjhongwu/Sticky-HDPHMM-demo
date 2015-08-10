@@ -1,4 +1,4 @@
-# Sticky HMM for time series denoising
+# Sticky HDP-HMM for time series denoising
 
 Suppose that we observed several time series and their underlying processes are discreted-valued. The sticky hidden-Markov model can be used to denoised these noisy time series. Run `python3 shdp_demo.py` to show a demonstration (with animation!).
 
