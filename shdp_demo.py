@@ -3,11 +3,12 @@ import matplotlib.pyplot as plt
 from scipy.stats import gaussian_kde
 from matplotlib import animation
 from matplotlib.colors import PowerNorm
-        
+from cycler import cycler        
+
 from shdp import StickyHDPHMM
 
 if __name__ == '__main__':    
-    np.random.seed(11)
+    #np.random.seed(11)
     H = 3
     L = 30
     colors = ['r', 'b', 'g']
@@ -17,7 +18,7 @@ if __name__ == '__main__':
     xs = np.logspace(np.log10(vmin), np.log10(vmax), 100)
     logxs = np.log10(xs)
     logdata = np.log10(data)
-    hdp = StickyHDPHMM(logdata, L=L, kmeans_init=True)
+    hdp = StickyHDPHMM(logdata, L=L)#, kmeans_init=True)
     shdp = StickyHDPHMM(logdata, kappa=10, L=L, 
                         kmeans_init=False)
 
@@ -49,10 +50,12 @@ if __name__ == '__main__':
         text.set_text("MCMC iteration {0}".format(t))
         return line_shdp + dist_shdp + [trans_shdp, text] + areas
 
+    cycle = cycler('color', colors)
     fig = plt.figure(figsize=(14, 8), facecolor='w')
     
     ax1 = plt.subplot2grid((15, 20), (0, 0), colspan=13, rowspan=5)    
-    plt.gca().set_color_cycle(colors)
+    plt.gca().set_prop_cycle(cycle)
+
     ax1.set_title("Simulated data")
     ax1.set_yscale("log")
 
@@ -64,7 +67,7 @@ if __name__ == '__main__':
     ax1.grid()
     
     ax2 = plt.subplot2grid((15, 20), (7, 0), colspan=13, rowspan=5)
-    plt.gca().set_color_cycle(colors)
+    plt.gca().set_prop_cycle(cycle)
     ax2.set_title("Sticky HDP-HMM")
     ax2.set_xlabel("Time")
     ax2.set_ylabel("$f(t)$")
@@ -77,7 +80,7 @@ if __name__ == '__main__':
     ax2.grid()
     
     ax3 = plt.subplot2grid((15, 20), (0, 13), colspan=2, rowspan=5)    
-    plt.gca().set_color_cycle(colors)
+    plt.gca().set_prop_cycle(cycle)
     ax3.set_yscale("log")
     density = [gaussian_kde(logdata[:, h]) for h in range(H)]
     for h in range(H):
@@ -95,7 +98,7 @@ if __name__ == '__main__':
     ax3.grid()
     
     ax4 = plt.subplot2grid((15, 20), (7, 13), colspan=2, rowspan=5)  
-    plt.gca().set_color_cycle(colors)
+    plt.gca().set_prop_cycle(cycle)
     ax4.set_yscale("log")
     ys = np.array([density[h](logxs)  for h in range(H)]).T
     dist_shdp = ax4.plot(ys, xs)
@@ -104,6 +107,7 @@ if __name__ == '__main__':
 
     for h in range(H):
         ax4.add_patch(areas[h])
+
     ax4.set_xticklabels([])
     ax4.set_yticklabels([])
     ax4.set_ylim([vmin, vmax])
@@ -123,7 +127,6 @@ if __name__ == '__main__':
     text = ax7.text(0, 0.3, '', fontsize=15) 
     ax7.axis('off')
 
-
-    animation.FuncAnimation(fig, update, interval=0, blit=True, 
+    ani = animation.FuncAnimation(fig, update, interval=0, blit=True, 
                             frames=10000, init_func=init)
     plt.show()
